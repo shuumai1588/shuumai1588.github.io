@@ -23,7 +23,6 @@ async function overrideMultipleParts(url, targets) {
 }
 
 overrideMultipleParts("src/core/layout.html", [
-  { selector: "head",   overrideId: "override-head" },
   { selector: "header", overrideId: "override-header" },
   { selector: "footer", overrideId: "override-footer" }
 ]);
