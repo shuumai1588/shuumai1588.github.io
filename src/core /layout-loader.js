@@ -1,29 +1,26 @@
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("layout.html")
-        .then(res => res.text())
-        .then(html => {
-            const temp = document.createElement("html");
-            temp.innerHTML = html;
+async function overrideMultipleParts(url, targets) {
+  const res = await fetch(url);
+  const htmlText = await res.text();
 
-            // head の内容を追加
-            const newHead = temp.querySelector("head");
-            if (newHead) {
-                for (const node of newHead.children) {
-                    document.head.appendChild(node.cloneNode(true));
-                }
-            }
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlText, "text/html");
 
-            // header/footer を安全な場所に差し込む
-            const newHeader = temp.querySelector("header");
-            const newFooter = temp.querySelector("footer");
+  // targets = [{selector, overrideId}, ...]
+  targets.forEach(({ selector, overrideId }) => {
+    const extracted = doc.querySelector(selector);
+    const targetDiv = document.getElementById(overrideId);
 
-            if (newHeader) {
-                document.getElementById("layout-header")
-                    .appendChild(newHeader.cloneNode(true));
-            }
-            if (newFooter) {
-                document.getElementById("layout-footer")
-                    .appendChild(newFooter.cloneNode(true));
-            }
-        });
-});
+    if (extracted && targetDiv) {
+      targetDiv.innerHTML = extracted.innerHTML;
+    } else {
+      console.warn("対象が見つからない:", selector, overrideId);
+    }
+  });
+}
+
+// head, header, footer を順番に処理
+overrideMultipleParts("layout.html", [
+  { selector: "head",   overrideId: "override-head" },
+  { selector: "header", overrideId: "override-header" },
+  { selector: "footer", overrideId: "override-footer" }
+]);
