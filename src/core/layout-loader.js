@@ -1,28 +1,17 @@
-async function overrideMultipleParts(url, targets) {
-  const res = await fetch(url);
-  const htmlText = await res.text();
+fetch("src/core/layout.html")
+  .then(res => res.text())
+  .then(html => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlText, "text/html");
+    // header
+    const header = doc.querySelector("header");
+    if (header) {
+      document.querySelector("#override-header").innerHTML = header.innerHTML;
+    }
 
-  targets.forEach(({ selector, overrideId }) => {
-    const extracted = doc.querySelector(selector);
-    const targetDiv = document.getElementById(overrideId);
-
-    if (extracted && targetDiv) {
-      // headタグの中身だけを抽出（タグなし）
-      let text = "";
-      for (const child of extracted.children) {
-        text += child.textContent.trim() + "\n";
-      }
-      targetDiv.textContent = text.trim();
-    } else {
-      console.warn("対象が見つからない:", selector, overrideId);
+    // footer
+    const footer = doc.querySelector("footer");
+    if (footer) {
+      document.querySelector("#override-footer").innerHTML = footer.innerHTML;
     }
   });
-}
-
-overrideMultipleParts("src/core/layout.html", [
-  { selector: "header", overrideId: "override-header" },
-  { selector: "footer", overrideId: "override-footer" }
-]);
