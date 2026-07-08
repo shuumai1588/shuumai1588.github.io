@@ -1,20 +1,10 @@
 <html lang=ja>
 
 <head>
-    <meta charset="UTF-8">
-    <link href="css_public.css" rel="stylesheet">
     <title>ページタイトル</title>
-    <meta name="description" content="『しぐねる』というネット活動者のホームページです">
-    <!-- 以下ファビコン -->
-    <link rel="icon" href="favicon.ico">
-    <!-- 以下モバイル対応 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 以下SNS対応 -->
+    <meta name="description" content="ページ説明文">
     <meta property="og:title" content="ページタイトル" />
     <meta property="og:description" content="ページ説明文" />
-    <meta property="og:image" content="サムネイル画像URL" />
-    <meta property="og:url" content="ページURL" />
-    <meta property="og:type" content="website" />
 </head>
     
 <body>
@@ -26,26 +16,6 @@
 </body>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("layout.html")
-        .then(res => res.text())
-        .then(html => {
-            const temp = document.createElement("html");
-            temp.innerHTML = html;
-
-            // head の内容を差し替え
-            const newHead = temp.querySelector("head");
-            if (newHead) {
-                document.head.innerHTML = newHead.innerHTML;
-            }
-
-            // body の内容を差し替え
-            const newBody = temp.querySelector("body");
-            if (newBody) {
-                document.body.innerHTML = newBody.innerHTML;
-            }
-        });
-});
 </script>
   
 </html>
